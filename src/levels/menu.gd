@@ -64,11 +64,11 @@ func _on_peer_connected() -> void:
 
 	await get_tree().create_timer(1.0).timeout
 
-	get_tree().change_scene_to_file("res://levels/level_remote.tscn")
+	get_tree().change_scene_to_file("res://src/levels/level_remote.tscn")
 
 
 func _on_peer_disconnected(reason: String) -> void:
 	status_label.text = "Disconnected: " + reason
 
 func _on_local_coop_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://levels/level_local.tscn")
+	get_tree().change_scene_to_file("res://src/levels/level_local.tscn")

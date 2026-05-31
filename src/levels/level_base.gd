@@ -1,4 +1,5 @@
 extends Node2D
+class_name LevelBase
 
 @onready var ball = %ball
 @onready var left = %left
@@ -7,15 +8,14 @@ extends Node2D
 @onready var right_score_label = %right_score
 
 var state := GameState.new()
-var input := InputLocal.new()
 
-func _ready():
+func _ready() -> void:
 	state.setup(
 		get_viewport_rect().size,
 		left.get_texture().get_size()
 	)
 
-func process_ball(delta: float):
+func process_ball(delta: float) -> void:
 	var ball_pos = ball.global_position
 	var left_rect = Rect2(left.global_position - state.pad_size * 0.5, state.pad_size)
 	var right_rect = Rect2(right.global_position - state.pad_size * 0.5, state.pad_size)
@@ -36,7 +36,7 @@ func process_ball(delta: float):
 
 	ball.global_position = ball_pos
 
-func process_game_state():
+func process_game_state() -> void:
 	var ball_pos = ball.global_position
 
 	if ball_pos.x < 0:
@@ -58,37 +58,40 @@ func process_game_state():
 
 	ball.global_position = ball_pos
 
-func process_left_pad(delta: float):
-	var left_pos = left.global_position
+func process_pad(pad, move_up: bool, move_down: bool, delta: float) -> void:
+	var pad_pos = pad.global_position
 	var speed = clamp(
 		state.INITIAL_PAD_SPEED + 10 * state.game_round,
 		state.INITIAL_PAD_SPEED,
 		state.MAX_PAD_SPEED
 	)
 
-	if (left_pos.y > 0 and input.left_move_up()):
-		left_pos.y += -speed * delta
-	if (left_pos.y < state.screen_size.y and input.left_move_down()):
-		left_pos.y += speed * delta
+	if (pad_pos.y > 0 and move_up):
+		pad_pos.y += -speed * delta
+	if (pad_pos.y < state.screen_size.y and move_down):
+		pad_pos.y += speed * delta
 
-	left.global_position = left_pos
+	pad.global_position = pad_pos
 
-func process_right_pad(delta: float):
-	var right_pos = right.global_position
-	var speed = clamp(
-		state.INITIAL_PAD_SPEED + 10 * state.game_round,
-		state.INITIAL_PAD_SPEED,
-		state.MAX_PAD_SPEED
-	)
+func left_move_up() -> bool:
+	return false
 
-	if (right_pos.y > 0 and input.right_move_up()):
-		right_pos.y += -speed * delta
-	if (right_pos.y < state.screen_size.y and input.right_move_down()):
-		right_pos.y += speed * delta
+func left_move_down() -> bool:
+	return false
 
-	right.global_position = right_pos
+func right_move_up() -> bool:
+	return false
 
-func _process(delta: float):
+func right_move_down() -> bool:
+	return false
+
+func process_left_pad(delta: float) -> void:
+	process_pad(left, left_move_up(), left_move_down(), delta)
+
+func process_right_pad(delta: float) -> void:
+	process_pad(right, right_move_up(), right_move_down(), delta)
+
+func process_simulation(delta: float) -> void:
 	process_ball(delta)
 	process_game_state()
 	process_left_pad(delta)

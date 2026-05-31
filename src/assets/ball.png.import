@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chv58rn4uin65"
-path="res://.godot/imported/left_pallete.png-f39f1bba77b65a6fdf104b0b1a4f1899.ctex"
+uid="uid://b0a3i66i3lkmm"
+path="res://.godot/imported/ball.png-295fe830e992eb83f6e1960f2966bdc5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/left_pallete.png"
-dest_files=["res://.godot/imported/left_pallete.png-f39f1bba77b65a6fdf104b0b1a4f1899.ctex"]
+source_file="res://src/assets/ball.png"
+dest_files=["res://.godot/imported/ball.png-295fe830e992eb83f6e1960f2966bdc5.ctex"]
 
 [params]
 

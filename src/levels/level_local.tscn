@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bwcfww0n68buj"]
 
-[ext_resource type="Script" uid="uid://caoiqqtj3gqst" path="res://levels/level_local.gd" id="1_ktfr2"]
-[ext_resource type="Texture2D" uid="uid://chv58rn4uin65" path="res://assets/left_pallete.png" id="2_44x8d"]
-[ext_resource type="Texture2D" uid="uid://tp7o08w1n6py" path="res://assets/right_pallete.png" id="3_ivpvi"]
-[ext_resource type="Texture2D" uid="uid://ceygpfj18ifao" path="res://assets/separator.png" id="4_0v1st"]
-[ext_resource type="Texture2D" uid="uid://b0a3i66i3lkmm" path="res://assets/ball.png" id="5_6gtgk"]
+[ext_resource type="Script" uid="uid://caoiqqtj3gqst" path="res://src/levels/level_local.gd" id="1_ktfr2"]
+[ext_resource type="Texture2D" uid="uid://chv58rn4uin65" path="res://src/assets/left_pallete.png" id="2_44x8d"]
+[ext_resource type="Texture2D" uid="uid://tp7o08w1n6py" path="res://src/assets/right_pallete.png" id="3_ivpvi"]
+[ext_resource type="Texture2D" uid="uid://ceygpfj18ifao" path="res://src/assets/separator.png" id="4_0v1st"]
+[ext_resource type="Texture2D" uid="uid://b0a3i66i3lkmm" path="res://src/assets/ball.png" id="5_6gtgk"]
 
 [node name="Level1" type="Node2D" unique_id=1605318639]
 script = ExtResource("1_ktfr2")
