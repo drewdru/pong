@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://bwcfww0n68buj"]
+
+[ext_resource type="Script" uid="uid://caoiqqtj3gqst" path="res://levels/level_local.gd" id="1_ktfr2"]
+[ext_resource type="Texture2D" uid="uid://chv58rn4uin65" path="res://assets/left_pallete.png" id="2_44x8d"]
+[ext_resource type="Texture2D" uid="uid://tp7o08w1n6py" path="res://assets/right_pallete.png" id="3_ivpvi"]
+[ext_resource type="Texture2D" uid="uid://ceygpfj18ifao" path="res://assets/separator.png" id="4_0v1st"]
+[ext_resource type="Texture2D" uid="uid://b0a3i66i3lkmm" path="res://assets/ball.png" id="5_6gtgk"]
+
+[node name="Level1" type="Node2D" unique_id=1605318639]
+script = ExtResource("1_ktfr2")
+
+[node name="left" type="Sprite2D" parent="." unique_id=783942244]
+unique_name_in_owner = true
+position = Vector2(67, 183)
+texture = ExtResource("2_44x8d")
+
+[node name="right" type="Sprite2D" parent="." unique_id=988886364]
+unique_name_in_owner = true
+position = Vector2(577, 187)
+texture = ExtResource("3_ivpvi")
+
+[node name="separator" type="Sprite2D" parent="." unique_id=1578916260]
+unique_name_in_owner = true
+position = Vector2(320, 200)
+texture = ExtResource("4_0v1st")
+
+[node name="ball" type="Sprite2D" parent="." unique_id=1075861995]
+unique_name_in_owner = true
+position = Vector2(320, 188)
+texture = ExtResource("5_6gtgk")
+
+[node name="right_score" type="Label" parent="." unique_id=102759410]
+unique_name_in_owner = true
+offset_left = 350.0
+offset_right = 391.0
+offset_bottom = 34.0
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 2
+
+[node name="left_score" type="Label" parent="." unique_id=71331049]
+unique_name_in_owner = true
+offset_left = 250.0
+offset_right = 291.0
+offset_bottom = 34.0
+theme_override_font_sizes/font_size = 24
+text = "0"

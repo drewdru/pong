@@ -1,0 +1,21 @@
+{
+  "name": "pong-webrtc-signaling",
+  "version": "1.0.0",
+  "description": "WebRTC signaling server for Pong P2P",
+  "main": "dist/signaling-server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx signaling-server.ts",
+    "build": "tsc",
+    "start": "node dist/signaling-server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "tsx": "^4.19.2",
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.12"
+  }
+}
