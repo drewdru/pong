@@ -58,32 +58,37 @@ func process_game_state() -> void:
 
 	ball.global_position = ball_pos
 
-func process_pad(pad, move_up: bool, move_down: bool, delta: float) -> void:
+func process_pad(pad, move_up: float, move_down: float, delta: float) -> void:
 	var pad_pos = pad.global_position
+
 	var speed = clamp(
 		state.INITIAL_PAD_SPEED + 10 * state.game_round,
 		state.INITIAL_PAD_SPEED,
 		state.MAX_PAD_SPEED
 	)
 
-	if (pad_pos.y > 0 and move_up):
-		pad_pos.y += -speed * delta
-	if (pad_pos.y < state.screen_size.y and move_down):
-		pad_pos.y += speed * delta
+	var input = move_down - move_up
+	pad_pos.y += input * speed * delta
+	var half_height = state.pad_size.y * 0.5
+
+	if pad_pos.y < half_height:
+		pad_pos.y = half_height
+	elif pad_pos.y > state.screen_size.y - half_height:
+		pad_pos.y = state.screen_size.y - half_height
 
 	pad.global_position = pad_pos
 
-func left_move_up() -> bool:
-	return false
+func left_move_up() -> float:
+	return 0.0
 
-func left_move_down() -> bool:
-	return false
+func left_move_down() -> float:
+	return 0.0
 
-func right_move_up() -> bool:
-	return false
+func right_move_up() -> float:
+	return 0.0
 
-func right_move_down() -> bool:
-	return false
+func right_move_down() -> float:
+	return 0.0
 
 func process_left_pad(delta: float) -> void:
 	process_pad(left, left_move_up(), left_move_down(), delta)

@@ -16,23 +16,23 @@ func _process(delta: float) -> void:
 	else:
 		_send_input()
 
-func left_move_up() -> bool:
+func left_move_up() -> float:
 	return input.left_move_up()
 
-func left_move_down() -> bool:
+func left_move_down() -> float:
 	return input.left_move_down()
 
-func right_move_up() -> bool:
+func right_move_up() -> float:
 	return remote_input.up
 
-func right_move_down() -> bool:
+func right_move_down() -> float:
 	return remote_input.down
 
 func _send_input() -> void:
 	P2P.send_packet({
 		"type": "input",
-		"up": input.right_move_up() or input.left_move_up(),
-		"down": input.right_move_down() or input.left_move_down()
+		"up": input.right_move_up() + input.left_move_up(),
+		"down": input.right_move_down() + input.left_move_down()
 	})
 
 func _send_state() -> void:
@@ -85,8 +85,8 @@ func _on_p2p_packet_received(data: Dictionary) -> void:
 
 	if P2P.is_host:
 		if type == "input":
-			remote_input.up = bool(data.get("up", false))
-			remote_input.down = bool(data.get("down", false))
+			remote_input.up = float(data.get("up", 0.0))
+			remote_input.down = float(data.get("down", 0.0))
 	else:
 		if type == "state":
 			_apply_state(data)

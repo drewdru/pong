@@ -72,3 +72,7 @@ func _on_peer_disconnected(reason: String) -> void:
 
 func _on_local_coop_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://src/levels/level_local.tscn")
+
+
+func _on_play_with_ai_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://src/levels/level_ai.tscn")
