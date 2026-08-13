@@ -45,3 +45,24 @@ offset_right = 291.0
 offset_bottom = 34.0
 theme_override_font_sizes/font_size = 24
 text = "0"
+
+[node name="pause_menu" type="CenterContainer" parent="." unique_id=817289900]
+unique_name_in_owner = true
+offset_right = 640.0
+offset_bottom = 400.0
+
+[node name="items" type="VBoxContainer" parent="pause_menu" unique_id=745954027]
+layout_mode = 2
+
+[node name="start_play" type="Button" parent="pause_menu/items" unique_id=1285822802]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "▶️"
+
+[node name="restart" type="Button" parent="pause_menu/items" unique_id=1246566011]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "🔄"
+
+[connection signal="button_down" from="pause_menu/items/start_play" to="." method="_on_start_play_button_down"]
+[connection signal="button_down" from="pause_menu/items/restart" to="." method="_on_restart_button_down"]

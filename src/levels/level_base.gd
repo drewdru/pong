@@ -6,10 +6,12 @@ class_name LevelBase
 @onready var right = %right
 @onready var left_score_label = %left_score
 @onready var right_score_label = %right_score
+@onready var pause_menu = %pause_menu
 
 var state := GameState.new()
 
 func _ready() -> void:
+	GameController.restart.connect(_on_restart)
 	state.setup(
 		get_viewport_rect().size,
 		left.get_texture().get_size()
@@ -101,3 +103,25 @@ func process_simulation(delta: float) -> void:
 	process_game_state()
 	process_left_pad(delta)
 	process_right_pad(delta)
+
+func _on_restart() -> void:
+	state = GameState.new()
+	pause_menu.visible = false
+	state.setup(
+		get_viewport_rect().size,
+		left.get_texture().get_size()
+	)
+	ball.global_position = Vector2(320, 180)
+	left.global_position = Vector2(67, 183)
+	right.global_position = Vector2(577, 187)
+	left_score_label.text = str(state.left_score)
+	right_score_label.text = str(state.right_score)
+	GameController.resume()
+	if GameController.game_mode == 'local':
+		return
+	if GameController.player_role == 'host':
+		GameNetwork.send({
+			"type": "pause",
+			"is_game_on_pause": GameController.is_game_on_pause,
+		})
+	
