@@ -11,6 +11,8 @@ class_name LevelBase
 var state := GameState.new()
 
 func _ready() -> void:
+	if OS.has_feature("web"):
+		pause_menu.visible = false
 	GameController.restart.connect(_on_restart)
 	state.setup(
 		get_viewport_rect().size,
@@ -106,7 +108,6 @@ func process_simulation(delta: float) -> void:
 
 func _on_restart() -> void:
 	state = GameState.new()
-	pause_menu.visible = false
 	state.setup(
 		get_viewport_rect().size,
 		left.get_texture().get_size()
@@ -118,10 +119,15 @@ func _on_restart() -> void:
 	right_score_label.text = str(state.right_score)
 	GameController.resume()
 	if GameController.game_mode == 'local':
+		if not OS.has_feature("web"):
+			pause_menu.visible = false
 		return
 	if GameController.player_role == 'host':
 		GameNetwork.send({
 			"type": "pause",
 			"is_game_on_pause": GameController.is_game_on_pause,
 		})
+	else:
+		GameNetwork.send({ "type": "restart" })
+		WebGameBridge.notify('WaitForHost')
 	

@@ -2,6 +2,10 @@ extends LevelBase
 
 var input := InputLocal.new()
 var remote_input := InputRemote.new()
+var _last_up := 0.0
+var _last_down := 0.0
+var _state_send_timer := 0.0
+const STATE_SEND_INTERVAL := 1.0 / 30.0
 
 func _ready() -> void:
 	super._ready()
@@ -11,7 +15,8 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
 		if GameController.game_mode == 'local':
 			GameController.toggle_pause()
-			pause_menu.visible = GameController.is_game_on_pause
+			if not OS.has_feature("web"):
+				pause_menu.visible = GameController.is_game_on_pause
 			return
 		GameNetwork.send({
 			"type": "pause",
@@ -28,7 +33,10 @@ func _physics_process(delta: float) -> void:
 		return
 	if GameController.player_role == 'host':
 		process_simulation(delta)
-		_send_state()
+		_state_send_timer += delta
+		if _state_send_timer >= STATE_SEND_INTERVAL:
+			_state_send_timer -= STATE_SEND_INTERVAL
+			_send_state()
 	else:
 		_send_input()
 
@@ -51,8 +59,10 @@ func right_move_down() -> float:
 func _send_input() -> void:
 	var up = max(input.right_move_up(), input.left_move_up())
 	var down = max(input.right_move_down(), input.left_move_down())
-	if up == 0 and down == 0:
+	if up == _last_up and down == _last_down:
 		return
+	_last_up = up
+	_last_down = down
 	GameNetwork.send({
 		"type": "input",
 		"up": up,
@@ -103,6 +113,7 @@ func _apply_state(data: Dictionary) -> void:
 
 	var dir = data.get("direction", {})
 	state.direction = Vector2(dir.x, dir.y)
+	
 
 func _on_p2p_packet_received(data: Dictionary) -> void:
 	if GameController.game_mode == 'local':
@@ -113,20 +124,28 @@ func _on_p2p_packet_received(data: Dictionary) -> void:
 		if type == "input":
 			remote_input.up = float(data.get("up", 0.0))
 			remote_input.down = float(data.get("down", 0.0))
-	else:
-		if type == "state":
-			_apply_state(data)
-
-	if type == "pause":
-		if data.get("is_game_on_pause", false):
-			GameController.pause()
-		else:
-			GameController.resume()
-		if GameController.player_role == 'host':
+		if type == "resume":
+			WebGameBridge.notify('OtherPlayerWantToResume')
+		if type == "restart":
+			WebGameBridge.notify('OtherPlayerWantToRestart')
+		if type == "pause":
+			if data.get("is_game_on_pause", false):
+				GameController.pause()
+			else:
+				GameController.resume()
 			GameNetwork.send({
 				"type": "pause",
 				"is_game_on_pause": GameController.is_game_on_pause,
 			})
+	else:
+		if type == "state":
+			_apply_state(data)
+
+		if type == "pause":
+			if data.get("is_game_on_pause", false):
+				GameController.pause()
+			else:
+				GameController.resume()
 
 func _on_start_play_button_down() -> void:
 	if GameController.game_mode == 'local':

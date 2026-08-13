@@ -36,11 +36,12 @@ func _on_start_online(args: Array) -> void:
 		return
 	GameController.set_role(str(args[0]))
 	GameController.set_game_mode('online')
-	GameController.restart_game()
+	if GameController.player_role == 'host':
+		GameController.restart_game()
 	GameController.resume()
 
 
-func _on_start_local() -> void:
+func _on_start_local(_args: Array) -> void:
 	if not OS.has_feature("web"):
 		return
 	GameController.set_game_mode('local')
@@ -48,15 +49,15 @@ func _on_start_local() -> void:
 	GameController.resume()
 
 
-func _on_pause() -> void:
+func _on_pause(_args: Array) -> void:
 	if not OS.has_feature("web"):
 		return
 	GameController.pause()
 
-func _on_resume() -> void:
+func _on_resume(_args: Array) -> void:
 	if not OS.has_feature("web"):
 		return
-	GameController.resume()
+	GameController.resume(true)
 
 
 func set_menu_visibility(value: bool) -> void:
@@ -65,7 +66,11 @@ func set_menu_visibility(value: bool) -> void:
 	_window.__godotWebGameBridgeSetMenuVisibility(value)
 
 
-func _on_restart_game() -> void:
+func notify(translation_key: String) -> void:
+	_window.__godotWebGameBridgeNotify(translation_key)
+
+
+func _on_restart_game(_args: Array) -> void:
 	if not OS.has_feature("web"):
 		return
 	GameController.restart_game()

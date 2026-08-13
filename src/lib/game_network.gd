@@ -23,7 +23,6 @@ func send(data: Dictionary) -> void:
 func _on_js_message(args: Array) -> void:
 	if args.is_empty():
 		return
-
 	var data = JSON.parse_string(str(args[0]))
 	if data is Dictionary:
 		on_message.emit(data)
