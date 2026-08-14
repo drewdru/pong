@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://tp7o08w1n6py" path="res://src/assets/right_pallete.png" id="3_5kbde"]
 [ext_resource type="Texture2D" uid="uid://ceygpfj18ifao" path="res://src/assets/separator.png" id="4_4lpsp"]
 [ext_resource type="Texture2D" uid="uid://b0a3i66i3lkmm" path="res://src/assets/ball.png" id="5_1v1wa"]
+[ext_resource type="AudioStream" uid="uid://ccav5kay70tsv" path="res://src/assets/freesound_community-one_beep-99630.mp3" id="6_xxurb"]
+[ext_resource type="AudioStream" uid="uid://cjookj3qndyc6" path="res://src/assets/freesound_community-3beeps-108353.mp3" id="7_oiyd7"]
 
 [node name="LevelRemote" type="Node2D" unique_id=822091040]
 script = ExtResource("1_5foko")
@@ -63,6 +65,14 @@ text = "▶️"
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "🔄"
+
+[node name="beep_sound" type="AudioStreamPlayer" parent="." unique_id=493131663]
+unique_name_in_owner = true
+stream = ExtResource("6_xxurb")
+
+[node name="start_sound" type="AudioStreamPlayer" parent="." unique_id=417710491]
+unique_name_in_owner = true
+stream = ExtResource("7_oiyd7")
 
 [connection signal="button_down" from="pause_menu/items/start_play" to="." method="_on_start_play_button_down"]
 [connection signal="button_down" from="pause_menu/items/restart" to="." method="_on_restart_button_down"]

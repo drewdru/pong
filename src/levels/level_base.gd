@@ -7,6 +7,8 @@ class_name LevelBase
 @onready var left_score_label = %left_score
 @onready var right_score_label = %right_score
 @onready var pause_menu = %pause_menu
+@onready var beep_sound = %beep_sound
+@onready var start_sound = %start_sound
 
 var state := GameState.new()
 
@@ -18,6 +20,7 @@ func _ready() -> void:
 		get_viewport_rect().size,
 		left.get_texture().get_size()
 	)
+	start_sound.play()
 
 func process_ball(delta: float) -> void:
 	var ball_pos = ball.global_position
@@ -30,6 +33,8 @@ func process_ball(delta: float) -> void:
 	# Flip when touching roof or floor
 	if ((ball_pos.y < 0 and state.direction.y < 0) or (ball_pos.y > state.screen_size.y and state.direction.y > 0)):
 		state.direction.y = -state.direction.y
+		beep_sound.play()
+		state.sound_effect = 'beep_sound'
 
 	# Flip, change direction and increase speed when touching pads
 	if ((left_rect.has_point(ball_pos) and state.direction.x < 0) or (right_rect.has_point(ball_pos) and state.direction.x > 0)):
@@ -37,6 +42,8 @@ func process_ball(delta: float) -> void:
 		state.direction.y = randf() * 2.0 - 1.0
 		state.direction = state.direction.normalized()
 		state.ball_speed *= 1.1
+		beep_sound.play()
+		state.sound_effect = 'beep_sound'
 
 	ball.global_position = ball_pos
 
@@ -59,6 +66,8 @@ func process_game_state() -> void:
 			state.INITIAL_BALL_SPEED,
 			state.MAX_BALL_SPEED
 		)
+		start_sound.play()
+		state.sound_effect = 'start_sound'
 
 	ball.global_position = ball_pos
 
@@ -101,6 +110,7 @@ func process_right_pad(delta: float) -> void:
 	process_pad(right, right_move_up(), right_move_down(), delta)
 
 func process_simulation(delta: float) -> void:
+	state.sound_effect = ''
 	process_ball(delta)
 	process_game_state()
 	process_left_pad(delta)
@@ -112,6 +122,8 @@ func _on_restart() -> void:
 		get_viewport_rect().size,
 		left.get_texture().get_size()
 	)
+	start_sound.play()
+	state.sound_effect = 'start_sound'
 	ball.global_position = Vector2(320, 180)
 	left.global_position = Vector2(67, 183)
 	right.global_position = Vector2(577, 187)

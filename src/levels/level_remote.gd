@@ -113,7 +113,13 @@ func _apply_state(data: Dictionary) -> void:
 
 	var dir = data.get("direction", {})
 	state.direction = Vector2(dir.x, dir.y)
-	
+
+	state.sound_effect = data.get("sound_effect", '')
+	if state.sound_effect == 'beep_sound':
+		beep_sound.play()
+	if state.sound_effect == 'start_sound':
+		start_sound.play()
+
 
 func _on_p2p_packet_received(data: Dictionary) -> void:
 	if GameController.game_mode == 'local':
