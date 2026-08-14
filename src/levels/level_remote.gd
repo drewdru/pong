@@ -6,24 +6,39 @@ var _last_up := 0.0
 var _last_down := 0.0
 var _state_send_timer := 0.0
 const STATE_SEND_INTERVAL := 1.0 / 30.0
+var touch_count := 0
 
 func _ready() -> void:
 	super._ready()
 	GameNetwork.on_message.connect(_on_p2p_packet_received)
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			touch_count += 1
+			if touch_count == 2:
+				_on_pause_pressed()
+		else:
+			touch_count = max(touch_count - 1, 0)
+		return
 	if event.is_action_pressed("pause"):
-		if GameController.game_mode == 'local':
-			GameController.toggle_pause()
-			if not OS.has_feature("web"):
-				pause_menu.visible = GameController.is_game_on_pause
-			return
-		GameNetwork.send({
-			"type": "pause",
-			"is_game_on_pause": not GameController.is_game_on_pause,
-		})
-		if GameController.player_role == 'host':
-			GameController.toggle_pause()
+		_on_pause_pressed()
+	else:
+		input.handle_input(event)
+
+func _on_pause_pressed() -> void:
+	if GameController.game_mode == 'local':
+		GameController.toggle_pause()
+		if not OS.has_feature("web"):
+			pause_menu.visible = GameController.is_game_on_pause
+		return
+	GameNetwork.send({
+		"type": "pause",
+		"is_game_on_pause": not GameController.is_game_on_pause,
+	})
+	if GameController.player_role == 'host':
+		GameController.toggle_pause()
+
 
 func _physics_process(delta: float) -> void:
 	if GameController.is_game_on_pause:
