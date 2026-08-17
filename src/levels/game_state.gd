@@ -18,8 +18,6 @@ var left_score := 0
 var right_score := 0
 var game_round := 1
 
-var sound_effect := ''
-
 func setup(_screen_size: Vector2, _pad_size: Vector2) -> void:
 	screen_size = _screen_size
 	pad_size = _pad_size

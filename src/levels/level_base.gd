@@ -22,19 +22,19 @@ func _ready() -> void:
 	)
 	start_sound.play()
 
-func process_ball(delta: float) -> void:
+func process_ball(delta: float) -> bool:
 	var ball_pos = ball.global_position
 	var left_rect = Rect2(left.global_position - state.pad_size * 0.5, state.pad_size)
 	var right_rect = Rect2(right.global_position - state.pad_size * 0.5, state.pad_size)
 
 	# Move ball
 	ball_pos += state.direction * state.ball_speed * delta
-
+	var is_force_update = false
 	# Flip when touching roof or floor
 	if ((ball_pos.y < 0 and state.direction.y < 0) or (ball_pos.y > state.screen_size.y and state.direction.y > 0)):
 		state.direction.y = -state.direction.y
 		beep_sound.play()
-		state.sound_effect = 'beep_sound'
+		is_force_update = true
 
 	# Flip, change direction and increase speed when touching pads
 	if ((left_rect.has_point(ball_pos) and state.direction.x < 0) or (right_rect.has_point(ball_pos) and state.direction.x > 0)):
@@ -43,12 +43,14 @@ func process_ball(delta: float) -> void:
 		state.direction = state.direction.normalized()
 		state.ball_speed *= 1.1
 		beep_sound.play()
-		state.sound_effect = 'beep_sound'
+		is_force_update = true
 
 	ball.global_position = ball_pos
+	return is_force_update
 
-func process_game_state() -> void:
+func process_game_state() -> bool:
 	var ball_pos = ball.global_position
+	var is_force_update = false
 
 	if ball_pos.x < 0:
 		state.right_score += 1
@@ -67,9 +69,10 @@ func process_game_state() -> void:
 			state.MAX_BALL_SPEED
 		)
 		start_sound.play()
-		state.sound_effect = 'start_sound'
+		is_force_update = true
 
 	ball.global_position = ball_pos
+	return is_force_update
 
 func process_pad(pad, move_up: float, move_down: float, delta: float) -> void:
 	var pad_pos = pad.global_position
@@ -109,12 +112,21 @@ func process_left_pad(delta: float) -> void:
 func process_right_pad(delta: float) -> void:
 	process_pad(right, right_move_up(), right_move_down(), delta)
 
-func process_simulation(delta: float) -> void:
-	state.sound_effect = ''
-	process_ball(delta)
-	process_game_state()
+func process_simulation(delta: float) -> Array[bool]:
+	var force_update = process_ball(delta)
+	var force_ball_teleport = process_game_state()
 	process_left_pad(delta)
 	process_right_pad(delta)
+	return [force_update, force_ball_teleport]
+
+func process_web_client_simulation(delta: float) -> void:
+	process_ball(delta)
+	process_pad(
+		right,
+		left_move_up(),
+		left_move_down(),
+		delta
+	)
 
 func _on_restart() -> void:
 	state = GameState.new()
@@ -123,7 +135,6 @@ func _on_restart() -> void:
 		left.get_texture().get_size()
 	)
 	start_sound.play()
-	state.sound_effect = 'start_sound'
 	ball.global_position = Vector2(320, 180)
 	left.global_position = Vector2(67, 183)
 	right.global_position = Vector2(577, 187)
