@@ -219,11 +219,11 @@ func _on_p2p_packet_received(data: Dictionary) -> void:
 					float(left_pos.get("x", 0.0)),
 					float(left_pos.get("y", 0.0))
 				), 0.2)
-			var right_pose: Variant = data.get("left_pos", null)
-			if right_pose is Dictionary:
+			var right_pos: Variant = data.get("right_pos", null)
+			if right_pos is Dictionary:
 				right.global_position = right.global_position.lerp(Vector2(
-					float(right_pose.get("x", 0.0)),
-					float(right_pose.get("y", 0.0))
+					float(right_pos.get("x", 0.0)),
+					float(right_pos.get("y", 0.0))
 				), 0.2)
 
 func _on_start_play_button_down() -> void:
