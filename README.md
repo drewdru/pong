@@ -1,6 +1,9 @@
 # Pong
 A Godot Pong web game with P2P multiplayer.
+
 This game was developed to be integrated with [my personal site](https://github.com/drewdru/sitedrewdru)
+
+Inspired by [The 20 Games Challenge](https://20_games_challenge.gitlab.io/) to learn game progamming with Godot by starting with simple games of the past. 
 
 ## Features
 - Local multiplayer
